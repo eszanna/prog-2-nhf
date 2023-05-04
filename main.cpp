@@ -1,6 +1,9 @@
 #include <iostream>
 
 
+//#define MEMTRACE
+//#define MEMTRACE_CPP
+
 
 #include "memtrace.h"
 
@@ -8,13 +11,11 @@
 #include "filmtar.hpp"
 #include "gtest_lite.h"
 
-#define MEMTRACE_CPP
-
-
-void leak(){int* ptr = new int;}
+void leak() { int* ptr = new int; std::cout << ptr; }
 
 int main() {
     std::cout << "Udv a FILMTAR nagyhazimban!" << std::endl;
+    leak();
 /*
     Filmtar<Film> filmtarolo;
     Filmtar<DokumentumFilm> doktarolo;
@@ -203,7 +204,7 @@ int main() {
 
 */
 ///TESZTESETEK
-leak();
+
 TEST(Film, ures) {
       Film e = Film("");
       EXPECT_EQ((int)0, e.getHossz()) << "Baj van a hosszaval" << std::endl;
@@ -238,12 +239,12 @@ TEST(Filmtar, mukodik a filmtarolo tobb filmre) {
       Filmtar<Film> filmtarolo;
       Film e = Film("A kigyo labnyomai", 93, 1979);
       filmtarolo.felvesz(e);
-      EXPECT_EQ((int)1, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
+      EXPECT_EQ((size_t)1, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
       EXPECT_EQ((std::string)"A kigyo labnyomai", filmtarolo[0].getCim()) << "Baj van a filmtarral" << std::endl;
 
       Film j = Film("A csiga hazamegy", 1, 2003);
       filmtarolo.felvesz(j);
-      EXPECT_EQ((int)2, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
+      EXPECT_EQ((size_t)2, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
       EXPECT_EQ((std::string)"A csiga hazamegy", filmtarolo[1].getCim()) << "Baj van a filmtarral" << std::endl;
 
 }ENDM
@@ -252,12 +253,12 @@ TEST(Filmtar, mukodik a filmtarolo mas tipusra is) {
       Filmtar<CsaladiFilm> filmtarolo;
       CsaladiFilm e = CsaladiFilm("A kigyo labnyomai", 93, 1979, 12);
       filmtarolo.felvesz(e);
-      EXPECT_EQ((int)1, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
+      EXPECT_EQ((size_t)1, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
       EXPECT_EQ((std::string)"A kigyo labnyomai", filmtarolo[0].getCim()) << "Baj van a filmtarral" << std::endl;
 
       CsaladiFilm j = CsaladiFilm("A csiga hazamegy", 1, 2003, 12);
       filmtarolo.felvesz(j);
-      EXPECT_EQ((int)2, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
+      EXPECT_EQ((size_t)2, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
       EXPECT_EQ((std::string)"A csiga hazamegy", filmtarolo[1].getCim()) << "Baj van a filmtarral" << std::endl;
 
 }ENDM
@@ -267,7 +268,7 @@ TEST(Filmtar, torles) {
       Film e = Film("A kigyo labnyomai", 93, 1979);
       filmtarolo.felvesz(e);
       filmtarolo.torol(1);
-      EXPECT_EQ((int)0, filmtarolo.size()) << "Nem torol a filmtar" << std::endl;
+      EXPECT_EQ((size_t)0, filmtarolo.size()) << "Nem torol a filmtar" << std::endl;
 }ENDM
 
 TEST(Filmtar, indexelo op hiba) {
@@ -285,7 +286,7 @@ TEST(Filmtar, torles indexelo op hiba) {
 }ENDM
 
 
-leak();
+
 
     return 0;
 }
