@@ -2,13 +2,16 @@
 #define FILMTAR_HPP
 
 
-#include "memtrace.h"
-#define MEMTRACE_CPP
-
 #include <string>
 #include <iostream>
-#include "film.h"
 
+
+//#define MEMTRACE
+//#define MEMTRACE_CPP
+#include "memtrace.h"
+
+
+#include "film.h"
 
 
 ///tobbfele filmet tarolni tudo filmtar osztaly
@@ -29,8 +32,8 @@ public:
 
     ///parameterkent kapott filmet tesz a tarba
     void felvesz(const T& ap){
-        if(db == kapacitas){
-            std::cout << "Ujat kellett foglalni mert tele lett" << std::endl; //ha tele az eddigi, ujat foglalunk, 10-zel nagyobbat
+        if(db >= kapacitas){
+            //std::cout << "Ujat kellett foglalni mert tele lett" << std::endl; //ha tele az eddigi, ujat foglalunk, 10-zel nagyobbat
             kapacitas += 10;
             T* uj_tar = new T[kapacitas]();
             for(size_t i = 0; i<db; i++)          //belemasoljuk a regit
@@ -55,15 +58,18 @@ public:
         tar[idx] = T();
         for (size_t i = idx; i < db-1; i++) {
             tar[i] = tar[i+1];
+            
         }
         db--;
     }
 
     ///destruktor
-    ~Filmtar(){
-     for(size_t i = 0; i < db; i++)
-        torol(i);
-    }
+   // ~Filmtar(){
+    // for(size_t i = 0; i < db; i++)
+    //    torol(i);
+    //}
+
+    ~Filmtar() { delete[] tar; }
 
     ///indexelo operator
     Film operator[](size_t idx) {
