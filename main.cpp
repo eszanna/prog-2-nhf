@@ -1,21 +1,19 @@
 #include <iostream>
 
 
-//#define MEMTRACE
-//#define MEMTRACE_CPP
-
-
 #include "memtrace.h"
 
 #include "film.h"
 #include "filmtar.hpp"
 #include "gtest_lite.h"
+#include "string.h"
+#include "string.hpp"
 
-void leak() { int* ptr = new int; std::cout << ptr; }
+//void leak() { int* ptr = new int; std::cout << ptr; }
 
 int main() {
     std::cout << "Udv a FILMTAR nagyhazimban!" << std::endl;
-    leak();
+    //leak();
 /*
     Filmtar<Film> filmtarolo;
     Filmtar<DokumentumFilm> doktarolo;
@@ -62,7 +60,7 @@ int main() {
                 std::cout << "\nAdd meg a keresett film tipusat: 1 - Film, 2 - Csaladi film, 3 - Dokumentumfilm : ";
                 std::cin >> tip;
 
-                std::string c = "";
+                String c = "";
                 std::cout << "\nAdd meg a keresett film cimet:  ";
                 std::cin.ignore();
                 cp::getline(std::cin, c);
@@ -140,7 +138,7 @@ int main() {
                 std::cout << "\nAdd meg a torolni kivant film tipusat:  1 - Film, 2 - Csaladi film, 3 - Dokumentumfilm :";
                 std::cin >> tip;
 
-                std::string c = "";
+                String c = "";
                 std::cout << "\nAdd meg a torolni kivant film cimet:  ";
                 std::cin.ignore();
                 std::getline(std::cin, c);
@@ -209,62 +207,71 @@ TEST(Film, ures) {
       Film e = Film("");
       EXPECT_EQ((int)0, e.getHossz()) << "Baj van a hosszaval" << std::endl;
       EXPECT_EQ((int)0, e.getKiadasEv()) << "Baj van a kiadas evevel" << std::endl;
-      EXPECT_EQ((std::string)"", e.getCim()) << "Baj van a cimmel" << std::endl;
+      EXPECT_STREQ("", e.getCim().c_str()) << "Baj van a cimmel" << std::endl;
 }ENDM
 
 TEST(Film, konstruktor) {
       Film e = Film("A vak asszony visszanez", 120, 2001);
       EXPECT_EQ((int)120, e.getHossz()) << "Baj van a hosszaval" << std::endl;
       EXPECT_EQ((int)2001, e.getKiadasEv()) << "Baj van a kiadas evevel" << std::endl;
-      EXPECT_EQ((std::string)"A vak asszony visszanez", e.getCim()) << "Baj van a cimmel" << std::endl;
+      EXPECT_STREQ("A vak asszony visszanez", e.getCim().c_str()) << "Baj van a cimmel" << std::endl;
 }ENDM
 
 TEST(DokumentumFilm, konstruktor) {
       DokumentumFilm e = DokumentumFilm("A vak asszony visszanez", 120, 2001, "Leiras");
       EXPECT_EQ((int)120, e.getHossz()) << "Baj van a hosszaval" << std::endl;
       EXPECT_EQ((int)2001, e.getKiadasEv()) << "Baj van a kiadas evevel" << std::endl;
-      EXPECT_EQ((std::string)"A vak asszony visszanez", e.getCim()) << "Baj van a cimmel" << std::endl;
-      EXPECT_EQ((std::string)"Leiras", e.getLeiras()) << "Baj van a leirassal" << std::endl;
+      EXPECT_STREQ("A vak asszony visszanez", e.getCim().c_str()) << "Baj van a cimmel" << std::endl;
+      EXPECT_STREQ("Leiras", e.getLeiras().c_str()) << "Baj van a leirassal" << std::endl;
 }ENDM
 
 TEST(CsaladiFilm, konstruktor) {
       CsaladiFilm e = CsaladiFilm("A vak asszony visszanez", 120, 2001, 6);
       EXPECT_EQ((int)120, e.getHossz()) << "Baj van a hosszaval" << std::endl;
       EXPECT_EQ((int)2001, e.getKiadasEv()) << "Baj van a kiadas evevel" << std::endl;
-      EXPECT_EQ((std::string)"A vak asszony visszanez", e.getCim()) << "Baj van a cimmel" << std::endl;
+      EXPECT_STREQ("A vak asszony visszanez", e.getCim().c_str()) << "Baj van a cimmel" << std::endl;
       EXPECT_EQ((int)6, e.getKorhatar()) << "Baj van a korhatarral" << std::endl;
 }ENDM
 
-TEST(Filmtar, mukodik a filmtarolo tobb filmre) {
-      Filmtar<Film> filmtarolo;
+TEST(Filmtar, mukodik a filmtarolo 1 filmre) {
+      Filmtar filmtarolo;
       Film e = Film("A kigyo labnyomai", 93, 1979);
       filmtarolo.felvesz(e);
       EXPECT_EQ((size_t)1, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
-      EXPECT_EQ((std::string)"A kigyo labnyomai", filmtarolo[0].getCim()) << "Baj van a filmtarral" << std::endl;
+      EXPECT_STREQ("A kigyo labnyomai", filmtarolo[0].getCim().c_str()) << "Baj van a filmtarral" << std::endl;
+}ENDM
+
+TEST(Filmtar, mukodik a filmtarolo tobb filmre) {
+      Filmtar filmtarolo;
+      Film e = Film("A kigyo labnyomai", 93, 1979);
+      filmtarolo.felvesz(e);
+      EXPECT_EQ((size_t)1, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
+      EXPECT_STREQ("A kigyo labnyomai", filmtarolo[0].getCim().c_str()) << "Baj van a filmtarral" << std::endl;
 
       Film j = Film("A csiga hazamegy", 1, 2003);
       filmtarolo.felvesz(j);
       EXPECT_EQ((size_t)2, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
-      EXPECT_EQ((std::string)"A csiga hazamegy", filmtarolo[1].getCim()) << "Baj van a filmtarral" << std::endl;
+      EXPECT_STREQ("A csiga hazamegy", filmtarolo[1].getCim().c_str()) << "Baj van a filmtarral" << std::endl;
 
 }ENDM
 
 TEST(Filmtar, mukodik a filmtarolo mas tipusra is) {
-      Filmtar<CsaladiFilm> filmtarolo;
+      Filmtar filmtarolo;
       CsaladiFilm e = CsaladiFilm("A kigyo labnyomai", 93, 1979, 12);
       filmtarolo.felvesz(e);
       EXPECT_EQ((size_t)1, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
-      EXPECT_EQ((std::string)"A kigyo labnyomai", filmtarolo[0].getCim()) << "Baj van a filmtarral" << std::endl;
+      EXPECT_EQ((int)12, e.getKorhatar()) << "Baj van a filmtarral" << std::endl;
+      EXPECT_STREQ("A kigyo labnyomai", filmtarolo[0].getCim().c_str()) << "Baj van a filmtarral" << std::endl;
 
       CsaladiFilm j = CsaladiFilm("A csiga hazamegy", 1, 2003, 12);
       filmtarolo.felvesz(j);
       EXPECT_EQ((size_t)2, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
-      EXPECT_EQ((std::string)"A csiga hazamegy", filmtarolo[1].getCim()) << "Baj van a filmtarral" << std::endl;
+      EXPECT_STREQ("A csiga hazamegy", filmtarolo[1].getCim().c_str()) << "Baj van a filmtarral" << std::endl;
 
 }ENDM
 
 TEST(Filmtar, torles) {
-      Filmtar<Film> filmtarolo;
+      Filmtar filmtarolo;
       Film e = Film("A kigyo labnyomai", 93, 1979);
       filmtarolo.felvesz(e);
       filmtarolo.torol(1);
@@ -272,14 +279,14 @@ TEST(Filmtar, torles) {
 }ENDM
 
 TEST(Filmtar, indexelo op hiba) {
-      Filmtar<Film> filmtarolo;
+      Filmtar filmtarolo;
       Film e = Film("A kigyo labnyomai", 93, 1979);
       filmtarolo.felvesz(e);
       EXPECT_THROW(filmtarolo[1], const char*);
 }ENDM
 
 TEST(Filmtar, torles indexelo op hiba) {
-      Filmtar<Film> filmtarolo;
+      Filmtar filmtarolo;
       Film e = Film("A kigyo labnyomai", 93, 1979);
       filmtarolo.felvesz(e);
       EXPECT_THROW(filmtarolo.torol(2), const char*);
