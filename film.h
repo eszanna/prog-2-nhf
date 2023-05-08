@@ -6,18 +6,21 @@
 
 #include "string.h"
 #include "string.hpp"
-///hordozhato getline az infoc++ oldalrol kolcsonkerve
+///getline
 namespace cp {
-    std::istream& getline(std::istream& is, String& str) {
+    String& getline(std::istream& is, String& str) {
         str = "";
-        char c = '\0';
+        char c;
         while (is.get(c)) {
             if (c == '\n') {
                 break;
             }
-            str += c;
+            if (c == '\r') {
+                continue;
+            }
+        str = str + c;
         }
-        return is;
+        return str;
     }
 }
 
@@ -28,19 +31,22 @@ protected:
     int kiadasEv;
 
 public:
-    ///parameter nelkuli ctr
-    Film() {}
+    ///Parameter nelkuli ctr
+    Film() { cim = ""; hossz = 0; kiadasEv = 0; }
 
     Film(String c, int h = 0, int k = 0) : cim(c), hossz(h), kiadasEv(k){}
 
-    ///copy ctr
+    // Destruktor
+    virtual ~Film() { cim = ""; hossz = 0; kiadasEv = 0; }
+
+    ///Copy ctr
     Film(const Film& rhs){
             cim = rhs.cim;
             hossz = rhs.hossz;
             kiadasEv = rhs.kiadasEv;
 
     }
-    ///assign operator
+    ///Assign operator
     Film& operator=(const Film& rhs){
         if(this != &rhs){
             cim = rhs.cim;
@@ -50,20 +56,20 @@ public:
         return *this;
     }
 
-    virtual ~Film() {}
+    
 
-    ///getterek
+    ///Getterek
     String getCim(){return cim;}
     int getHossz(){return hossz;}
     int getKiadasEv(){return kiadasEv;}
 
-    ///kiirja a standard outputra
+    ///Kiirja a standard outputra
     virtual void kiir() const {
         std::cout << "\nCim: \t\t\t" << cim << std::endl << "Hossz: \t\t\t" << hossz << std::endl << "Kiadas eve: \t\t" << kiadasEv << std::endl;
     }
 
-    ///standard inputrol beolvas
-     Film beolvas() {
+    ///Standard inputrol beolvas
+     Film* beolvas() {
         String c = "";
         int h;
         int e;
@@ -78,7 +84,7 @@ public:
 
         std::cout << "Kiadas eve: ";
         std::cin >> e;
-        return Film(c,h,e);
+        return new Film(c,h,e);
     }
 
 };
@@ -90,6 +96,7 @@ public:
     ///ctr-ek
     CsaladiFilm(): Film(), korhatar(0){}
     CsaladiFilm(String c, int h, int k, int korh) : Film(c, h, k), korhatar(korh) {}
+    virtual ~CsaladiFilm() { korhatar = 0; }
 
     ///cpy ctr
     CsaladiFilm(const CsaladiFilm& rhs) : Film(rhs){
@@ -116,13 +123,15 @@ public:
     }
 
     ///beolvasas szinten visszavezetve a Film-re
-     CsaladiFilm beolvasCsaladi() {
-        Film temp = Film::beolvas();
+     CsaladiFilm* beolvasCsaladi() {
+        Film* temp = Film::beolvas();
         int kh;
         std::cout << "Korhatar: ";
         std::cin>> kh;
 
-        return CsaladiFilm(temp.getCim(), temp.getHossz(), temp.getKiadasEv(), kh);
+        CsaladiFilm* uj = new CsaladiFilm(temp->getCim(), temp->getHossz(), temp->getKiadasEv(), kh); 
+        delete[] temp;                  //a Film mar nem kell, bemasoltuk a Csaladiba, torolni kell
+        return uj;
     }
 
 };
@@ -134,6 +143,7 @@ public:
     ///ctr-ek
     DokumentumFilm() : Film(), leiras("") {}
     DokumentumFilm(String c, int h, int k, String l) : Film(c, h, k), leiras(l) {}
+    virtual ~DokumentumFilm() { leiras = ""; }
 
     ///copy ctr
     DokumentumFilm(const DokumentumFilm& rhs) : Film(rhs){
@@ -158,14 +168,16 @@ public:
     }
 
     ///beolvasas ismet a Film-et felhasznalva
-     DokumentumFilm beolvasDokumentum() {
-        Film f = Film::beolvas();
+     DokumentumFilm* beolvasDokumentum() {
+        Film* temp = Film::beolvas();
         String l;
         std::cout << "Leiras: ";
         std::cin.ignore();
         cp::getline(std::cin, l);
 
-        return DokumentumFilm(f.getCim(), f.getHossz(), f.getKiadasEv(), l);
+        DokumentumFilm* uj = new DokumentumFilm(temp->getCim(), temp->getHossz(), temp->getKiadasEv(), l);
+        delete[] temp;              //a Film mar nem kell, bemasoltuk a Dokumentumba, torolni kell
+        return uj;
     }
 
 };
