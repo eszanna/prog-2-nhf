@@ -3,16 +3,23 @@
 
 #include <iostream>
 #include <cstring>
+
+#include "memtrace.h"
+
 class String {
     char *pData;         /// pointer az adatra
     size_t len;    /// hossz 0 nelkul
 public:
 
-size_t size() const { return len; }
-
+    size_t size() const { return len; }
 
     /// Default konstruktor:
     String() :pData(0), len(0) {}
+
+    /// Destruktor (disposeString)
+    ~String() { delete[] pData; }
+
+    void dispose(String& e) { delete[] pData; len = 0; }
 
     /// C-stringet ad vissza
     const char* c_str() const { if (pData) return pData; else return "";}
@@ -33,16 +40,14 @@ size_t size() const { return len; }
         strcpy(pData, p);
 }
 
-
+    ///cpy ctr
     String(const String& s1){
         len = s1.len;
         if ((pData = s1.pData) == NULL) return;
         pData = new char[len+1];
         strcpy(pData, s1.pData);
-}
+    }
 
-    /// Destruktor (disposeString)
-    ~String() { delete[] pData; }
 
     void printDbg(const char *txt = "") const {
         std::cout << txt << "[" << len << "], "
@@ -102,16 +107,21 @@ size_t size() const { return len; }
     const char& operator[](unsigned int idx) const{
         if (idx >= len) throw "String: indexelesi hiba";
         return pData[idx];
-}
-    bool operator==(String& rhs){
-        return(this->pData == rhs.pData);
+    }
 
-}
+    bool operator==(const String& rhs) const {
+        if (len != rhs.len) {
+            return false;
+        }
+        return std::strcmp(pData, rhs.pData) == 0;
+    }
 
     void erase() { *this = ""; }
 };
+
 using std::cin;
 using std::ios_base;
+
 /// Globalis fgvek
 /// kii­r az ostream-re (printString)
 std::ostream& operator<<(std::ostream& os, const String& s0){
