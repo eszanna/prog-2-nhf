@@ -4,20 +4,26 @@
 #ifndef FILM_H
 #define FILM_H
 
-
+#include "string.h"
+#include "string.hpp"
 ///hordozhato getline az infoc++ oldalrol kolcsonkerve
-namespace cp{
-    std::istream& getline(std::istream& is, std::string& str){
-        std::getline(is, str);
-        if(str.size()&& *str.rbegin() == '\r')
-            str.erase(str.size()-1);
+namespace cp {
+    std::istream& getline(std::istream& is, String& str) {
+        str = "";
+        char c = '\0';
+        while (is.get(c)) {
+            if (c == '\n') {
+                break;
+            }
+            str += c;
+        }
         return is;
     }
 }
 
 class Film {
 protected:
-    std::string cim;
+    String cim;
     int hossz;
     int kiadasEv;
 
@@ -25,7 +31,7 @@ public:
     ///parameter nelkuli ctr
     Film() {}
 
-    Film(std::string c, int h = 0, int k = 0) : cim(c), hossz(h), kiadasEv(k){}
+    Film(String c, int h = 0, int k = 0) : cim(c), hossz(h), kiadasEv(k){}
 
     ///copy ctr
     Film(const Film& rhs){
@@ -47,7 +53,7 @@ public:
     virtual ~Film() {}
 
     ///getterek
-    std::string getCim(){return cim;}
+    String getCim(){return cim;}
     int getHossz(){return hossz;}
     int getKiadasEv(){return kiadasEv;}
 
@@ -58,7 +64,7 @@ public:
 
     ///standard inputrol beolvas
      Film beolvas() {
-        std::string c = "";
+        String c = "";
         int h;
         int e;
 
@@ -83,7 +89,7 @@ class CsaladiFilm : public Film {
 public:
     ///ctr-ek
     CsaladiFilm(): Film(), korhatar(0){}
-    CsaladiFilm(std::string c, int h, int k, int korh) : Film(c, h, k), korhatar(korh) {}
+    CsaladiFilm(String c, int h, int k, int korh) : Film(c, h, k), korhatar(korh) {}
 
     ///cpy ctr
     CsaladiFilm(const CsaladiFilm& rhs) : Film(rhs){
@@ -122,12 +128,12 @@ public:
 };
 
 class DokumentumFilm : public Film {
-    std::string leiras;
+    String leiras;
 
 public:
     ///ctr-ek
     DokumentumFilm() : Film(), leiras("") {}
-    DokumentumFilm(std::string c, int h, int k, std::string l) : Film(c, h, k), leiras(l) {}
+    DokumentumFilm(String c, int h, int k, String l) : Film(c, h, k), leiras(l) {}
 
     ///copy ctr
     DokumentumFilm(const DokumentumFilm& rhs) : Film(rhs){
@@ -143,7 +149,7 @@ public:
         return *this;
     }
     ///getter
-    std::string getLeiras(){return leiras;}
+    String getLeiras(){return leiras;}
 
     ///kiiras visszavezetve a Film-re
     virtual void kiir() const override {
@@ -154,7 +160,7 @@ public:
     ///beolvasas ismet a Film-et felhasznalva
      DokumentumFilm beolvasDokumentum() {
         Film f = Film::beolvas();
-        std::string l;
+        String l;
         std::cout << "Leiras: ";
         std::cin.ignore();
         cp::getline(std::cin, l);
