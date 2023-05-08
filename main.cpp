@@ -7,34 +7,32 @@
 #include "filmtar.hpp"
 #include "gtest_lite.h"
 #include "string.h"
-#include "string.hpp"
 
-//void leak() { int* ptr = new int; std::cout << ptr; }
+
+void leak() { int* ptr = new int; std::cout << ptr; }
 
 int main() {
     std::cout << "Udv a FILMTAR nagyhazimban!" << std::endl;
-    //leak();
-/*
-    Filmtar<Film> filmtarolo;
-    Filmtar<DokumentumFilm> doktarolo;
-    Filmtar<CsaladiFilm> csaladitarolo;
+    leak();
+
+    Filmtar filmtarolo;
 
 //egy par film alapbol van benne, teszt
 
-    Film e = Film("A kigyo labnyomai", 93, 1979);
-    CsaladiFilm k = CsaladiFilm("Piroska es a farkalok", 90, 1995, 6);
-    DokumentumFilm h = DokumentumFilm("A csigak szexualitasa", 3600, 2006, "Megismerhetjuk ezen csodalatos himnos allatok szaporodasat.");
-    DokumentumFilm cs = DokumentumFilm("A csiga hazamegy", 1, 2003, "Hat most errol mit mondjak.");
-    Film s = Film("Star Wars 19: A robotok nemi elete", 69, 2020);
+    Film* e = new Film("A kigyo labnyomai", 93, 1979);
+    CsaladiFilm* k = new CsaladiFilm("Piroska es a farkalok", 90, 1995, 6);
+    DokumentumFilm* h = new DokumentumFilm("A csigak szexualitasa", 3600, 2006, "Megismerhetjuk ezen csodalatos himnos allatok szaporodasat.");
+    DokumentumFilm* cs = new DokumentumFilm("A csiga hazamegy", 1, 2003, "Hat most errol mit mondjak.");
+    Film* s = new Film("Star Wars 19: A robotok nemi elete", 69, 2020);
 
     filmtarolo.felvesz(e);
     filmtarolo.felvesz(s);
-    doktarolo.felvesz(h);
-    doktarolo.felvesz(cs);
-    csaladitarolo.felvesz(k);
+    filmtarolo.felvesz(h);
+    filmtarolo.felvesz(cs);
+    filmtarolo.felvesz(k);
 
 
-    int menu;
+    int menu = 0;
 
     while(menu != 6){
 
@@ -50,54 +48,28 @@ int main() {
 
         if (menu == 1) {
                 filmtarolo.kiir();
-                doktarolo.kiir();
-                csaladitarolo.kiir();
         }
 
         else if(menu == 2){
-                int tip;
-
-                std::cout << "\nAdd meg a keresett film tipusat: 1 - Film, 2 - Csaladi film, 3 - Dokumentumfilm : ";
-                std::cin >> tip;
 
                 String c = "";
                 std::cout << "\nAdd meg a keresett film cimet:  ";
                 std::cin.ignore();
                 cp::getline(std::cin, c);
 
+                bool talalt = false;
 
-        try{
-            switch(tip) {
-            case 1:
                 for(size_t i = 0; i < filmtarolo.size(); i++) {
                     if(filmtarolo[i].getCim() == c) {
                         filmtarolo[i].kiir();
-                    }else std::cout << "Nincs ilyen film";
+                        talalt = true;
+                        break;
+                    }
                 }
-                break;
-            case 2:
-                for(size_t i = 0; i < csaladitarolo.size(); i++) {
-                    if(csaladitarolo[i].getCim() == c) {
-                        csaladitarolo[i].kiir();
+                if(!talalt)
+                    std::cout << "\n\nNincs ilyen film";
 
-                    }else std::cout << "Nincs ilyen film";
-                }
-                break;
-            case 3:
-                for(size_t i = 0; i < doktarolo.size(); i++) {
-                    if(doktarolo[i].getCim() == c) {
-                        doktarolo[i].kiir();
 
-                    }else std::cout << "Nincs ilyen film";
-                }
-                break;
-
-            default:
-                throw "Nincs ilyen tipus!";
-            }
-        } catch (const char* msg){
-            std::cout << "Hiba: " << msg << " Irj be megfelelo tipust 1-2-3" << std::endl;
-            }
         }
 
 
@@ -107,7 +79,7 @@ int main() {
                 std::cin >> tipus;
 
                 if(tipus == 1){
-                    Film ujf = ujf.beolvas();
+                    Film* ujf = ujf->beolvas();
                     filmtarolo.felvesz(ujf);
                     std::cout<<"\nA modositott filmlista: "<<std::endl;
                     filmtarolo.kiir();
@@ -115,37 +87,30 @@ int main() {
                 }
 
                 else if(tipus == 2){
-                    CsaladiFilm ujcs = ujcs.beolvasCsaladi();
-                    csaladitarolo.felvesz(ujcs);
+                    CsaladiFilm* ujcs = ujcs->beolvasCsaladi();
+                    filmtarolo.felvesz(ujcs);
                     std::cout<<"\nA modositott csaladifilmlista: "<<std::endl;
-                    csaladitarolo.kiir();
+                    filmtarolo.kiir();
 
                 }
                 else if(tipus == 3){
-                    DokumentumFilm ujd = ujd.beolvasDokumentum();
-                    doktarolo.felvesz(ujd);
+                    DokumentumFilm* ujd = ujd->beolvasDokumentum();
+                    filmtarolo.felvesz(ujd);
                     std::cout<<"\nA modositott doksifilmlista: "<<std::endl;
-                    doktarolo.kiir();
+                    filmtarolo.kiir();
 
                 }
             else
-                throw "Nincs ilyen tipus";
-
+                std::cout<< "\n\nNincs ilyen tipus";
 }
 
          else if(menu == 4){
-                int tip;
-                std::cout << "\nAdd meg a torolni kivant film tipusat:  1 - Film, 2 - Csaladi film, 3 - Dokumentumfilm :";
-                std::cin >> tip;
 
                 String c = "";
                 std::cout << "\nAdd meg a torolni kivant film cimet:  ";
                 std::cin.ignore();
-                std::getline(std::cin, c);
+                cp::getline(std::cin, c);
 
-        try{
-            switch(tip){
-                case 1:
                     for(size_t i = 0; i<filmtarolo.size(); i++){
                         if(filmtarolo[i].getCim() == c){
                             filmtarolo.torol(i);
@@ -153,36 +118,7 @@ int main() {
                     }
                     std::cout<<"\nA modositott filmlista: "<<std::endl;
                     filmtarolo.kiir();
-                    break;
 
-               case 2:
-                    for(size_t i = 0; i<csaladitarolo.size(); i++){
-                        if(csaladitarolo[i].getCim() == c){
-                            csaladitarolo.torol(i);
-                        }
-                    }
-                    std::cout<<"\nA modositott csaladifilmlista: "<<std::endl;
-                    csaladitarolo.kiir();
-                    break;
-
-                case 3:
-                    for(size_t i = 0; i<doktarolo.size(); i++){
-                        if(doktarolo[i].getCim() == c){
-                            doktarolo.torol(i);
-                        }
-                    }
-                    std::cout<<"\nA modositott dokumentumfilmlista:: "<<std::endl;
-                    doktarolo.kiir();
-                    break;
-
-                default:
-                    throw "Nincs ilyen tipus";
-
-            }
-
-         } catch (const char* msg){
-            std::cout << "Hiba: " << msg << "Irj be megfelelo tipust 1-2-3" <<std::endl;
-        }
          }
 
 
@@ -200,7 +136,7 @@ int main() {
         }
     }
 
-*/
+
 ///TESZTESETEK
 
 TEST(Film, ures) {
@@ -235,7 +171,7 @@ TEST(CsaladiFilm, konstruktor) {
 
 TEST(Filmtar, mukodik a filmtarolo 1 filmre) {
       Filmtar filmtarolo;
-      Film e = Film("A kigyo labnyomai", 93, 1979);
+      Film* e = new Film("A kigyo labnyomai", 93, 1979);
       filmtarolo.felvesz(e);
       EXPECT_EQ((size_t)1, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
       EXPECT_STREQ("A kigyo labnyomai", filmtarolo[0].getCim().c_str()) << "Baj van a filmtarral" << std::endl;
@@ -243,12 +179,12 @@ TEST(Filmtar, mukodik a filmtarolo 1 filmre) {
 
 TEST(Filmtar, mukodik a filmtarolo tobb filmre) {
       Filmtar filmtarolo;
-      Film e = Film("A kigyo labnyomai", 93, 1979);
+      Film* e = new Film("A kigyo labnyomai", 93, 1979);
       filmtarolo.felvesz(e);
       EXPECT_EQ((size_t)1, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
       EXPECT_STREQ("A kigyo labnyomai", filmtarolo[0].getCim().c_str()) << "Baj van a filmtarral" << std::endl;
 
-      Film j = Film("A csiga hazamegy", 1, 2003);
+      Film* j = new Film("A csiga hazamegy", 1, 2003);
       filmtarolo.felvesz(j);
       EXPECT_EQ((size_t)2, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
       EXPECT_STREQ("A csiga hazamegy", filmtarolo[1].getCim().c_str()) << "Baj van a filmtarral" << std::endl;
@@ -257,13 +193,13 @@ TEST(Filmtar, mukodik a filmtarolo tobb filmre) {
 
 TEST(Filmtar, mukodik a filmtarolo mas tipusra is) {
       Filmtar filmtarolo;
-      CsaladiFilm e = CsaladiFilm("A kigyo labnyomai", 93, 1979, 12);
+      CsaladiFilm* e = new CsaladiFilm("A kigyo labnyomai", 93, 1979, 12);
       filmtarolo.felvesz(e);
       EXPECT_EQ((size_t)1, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
-      EXPECT_EQ((int)12, e.getKorhatar()) << "Baj van a filmtarral" << std::endl;
+      EXPECT_EQ((int)12, e->getKorhatar()) << "Baj van a filmtarral" << std::endl;
       EXPECT_STREQ("A kigyo labnyomai", filmtarolo[0].getCim().c_str()) << "Baj van a filmtarral" << std::endl;
 
-      CsaladiFilm j = CsaladiFilm("A csiga hazamegy", 1, 2003, 12);
+      CsaladiFilm* j = new CsaladiFilm("A csiga hazamegy", 1, 2003, 12);
       filmtarolo.felvesz(j);
       EXPECT_EQ((size_t)2, filmtarolo.size()) << "Baj van a filmtar merettel" << std::endl;
       EXPECT_STREQ("A csiga hazamegy", filmtarolo[1].getCim().c_str()) << "Baj van a filmtarral" << std::endl;
@@ -272,7 +208,7 @@ TEST(Filmtar, mukodik a filmtarolo mas tipusra is) {
 
 TEST(Filmtar, torles) {
       Filmtar filmtarolo;
-      Film e = Film("A kigyo labnyomai", 93, 1979);
+      Film* e = new Film("A kigyo labnyomai", 93, 1979);
       filmtarolo.felvesz(e);
       filmtarolo.torol(1);
       EXPECT_EQ((size_t)0, filmtarolo.size()) << "Nem torol a filmtar" << std::endl;
@@ -280,14 +216,14 @@ TEST(Filmtar, torles) {
 
 TEST(Filmtar, indexelo op hiba) {
       Filmtar filmtarolo;
-      Film e = Film("A kigyo labnyomai", 93, 1979);
+      Film* e = new Film("A kigyo labnyomai", 93, 1979);
       filmtarolo.felvesz(e);
       EXPECT_THROW(filmtarolo[1], const char*);
 }ENDM
 
 TEST(Filmtar, torles indexelo op hiba) {
       Filmtar filmtarolo;
-      Film e = Film("A kigyo labnyomai", 93, 1979);
+      Film* e = new Film("A kigyo labnyomai", 93, 1979);
       filmtarolo.felvesz(e);
       EXPECT_THROW(filmtarolo.torol(2), const char*);
 }ENDM
