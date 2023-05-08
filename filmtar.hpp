@@ -26,7 +26,7 @@ public:
     size_t size() const { return db; }
 
     ///parameterkent kapott filmet tesz a tarba
-    void felvesz(const Film& ap){
+    void felvesz(Film* ap){
         if (db >= kapacitas) {
             //ha tele az eddigi, ujat foglalunk, 10-zel nagyobbat
             kapacitas += 10;
@@ -41,7 +41,7 @@ public:
             for (size_t i = 0; i < db; ++i)
                 delete uj_tar[i];
         }
-        tar[db++] = new Film(ap); //mindenkeppen hozzaadjuk a vegere
+        tar[db++] = ap; //mindenkeppen hozzaadjuk a vegere
     }
 
     ///kiirja az osszes filmet
