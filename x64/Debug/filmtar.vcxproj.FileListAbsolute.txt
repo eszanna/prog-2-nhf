@@ -1,0 +1,4 @@
+C:\Users\Anna Szlovak\Desktop\Film\x64\Debug\filmtar.exe
+C:\Users\Anna Szlovak\Desktop\Film string\x64\Debug\filmtar.exe
+C:\Users\Anna Szlovak\Desktop\Filmstring\x64\Debug\filmtar.exe
+C:\Users\Anna Szlovak\Desktop\Filmstring utolso mukodo\x64\Debug\filmtar.exe
