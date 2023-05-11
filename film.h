@@ -5,7 +5,7 @@
 #define FILM_H
 
 #include "string.h"
-#include "string.hpp"
+
 ///getline
 namespace cp {
     String& getline(std::istream& is, String& str) {
@@ -56,7 +56,7 @@ public:
         return *this;
     }
 
-    
+
 
     ///Getterek
     String getCim(){return cim;}
@@ -89,98 +89,6 @@ public:
 
 };
 
-class CsaladiFilm : public Film {
-    int korhatar;
-
-public:
-    ///ctr-ek
-    CsaladiFilm(): Film(), korhatar(0){}
-    CsaladiFilm(String c, int h, int k, int korh) : Film(c, h, k), korhatar(korh) {}
-    virtual ~CsaladiFilm() { korhatar = 0; }
-
-    ///cpy ctr
-    CsaladiFilm(const CsaladiFilm& rhs) : Film(rhs){
-        korhatar = rhs.korhatar;
-    }
-
-    ///assign operator
-    CsaladiFilm& operator=(const CsaladiFilm& rhs){
-        if(this != &rhs){
-            Film::operator=(rhs);
-            korhatar = rhs.korhatar;
-        }
-        return *this;
-    }
-
-    ///getter
-    int getKorhatar(){return korhatar;}
-
-
-    ///kiiras visszavezetve a Film osztalyra, utana irja ki az extra adattagot
-    virtual void kiir() const override {
-        Film::kiir();
-        std::cout << "Korhatar: \t\t" << korhatar << std::endl;
-    }
-
-    ///beolvasas szinten visszavezetve a Film-re
-     CsaladiFilm* beolvasCsaladi() {
-        Film* temp = Film::beolvas();
-        int kh;
-        std::cout << "Korhatar: ";
-        std::cin>> kh;
-
-        CsaladiFilm* uj = new CsaladiFilm(temp->getCim(), temp->getHossz(), temp->getKiadasEv(), kh); 
-        delete[] temp;                  //a Film mar nem kell, bemasoltuk a Csaladiba, torolni kell
-        return uj;
-    }
-
-};
-
-class DokumentumFilm : public Film {
-    String leiras;
-
-public:
-    ///ctr-ek
-    DokumentumFilm() : Film(), leiras("") {}
-    DokumentumFilm(String c, int h, int k, String l) : Film(c, h, k), leiras(l) {}
-    virtual ~DokumentumFilm() { leiras = ""; }
-
-    ///copy ctr
-    DokumentumFilm(const DokumentumFilm& rhs) : Film(rhs){
-        leiras = rhs.leiras;
-    }
-
-    ///assign operator
-    DokumentumFilm& operator=(const DokumentumFilm& rhs){
-        if(this != &rhs){
-            Film::operator=(rhs);
-            leiras = rhs.leiras;
-        }
-        return *this;
-    }
-    ///getter
-    String getLeiras(){return leiras;}
-
-    ///kiiras visszavezetve a Film-re
-    virtual void kiir() const override {
-        Film::kiir();
-        std::cout << "Leiras: \t\t" << leiras << std::endl;
-    }
-
-    ///beolvasas ismet a Film-et felhasznalva
-     DokumentumFilm* beolvasDokumentum() {
-        Film* temp = Film::beolvas();
-        String l;
-        std::cout << "Leiras: ";
-        std::cin.ignore();
-        cp::getline(std::cin, l);
-
-        DokumentumFilm* uj = new DokumentumFilm(temp->getCim(), temp->getHossz(), temp->getKiadasEv(), l);
-        delete[] temp;              //a Film mar nem kell, bemasoltuk a Dokumentumba, torolni kell
-        return uj;
-    }
-
-};
 
 
 

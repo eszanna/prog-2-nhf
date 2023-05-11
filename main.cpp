@@ -75,7 +75,7 @@ int main() {
 
         else if (menu == 3) {
                 int tipus;
-                std::cout<<"\nMilyen tipusu lesz a felvett film?  1 - Film, 2 - Csaladi film, 3 - Dokumentumfilm : ";
+                std::cout<<"\nMilyen tipusu lesz a felvett film? \n\t\t\t 1 - Film\n\t\t\t 2 - Csaladi film\n\t\t\t 3 - Dokumentumfilm : ";
                 std::cin >> tipus;
 
                 if(tipus == 1){

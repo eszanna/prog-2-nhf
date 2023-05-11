@@ -7,7 +7,8 @@
 
 #include "memtrace.h"
 #include "film.h"
-
+#include "dokumentumfilm.h"
+#include "csaladifilm.h"
 
 ///tobbfele filmet tarolni tudo filmtar osztaly
 
