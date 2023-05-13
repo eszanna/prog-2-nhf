@@ -29,7 +29,7 @@ public:
         return *this;
     }
     ///getter
-    String getLeiras(){return leiras;}
+    String getLeiras()const {return leiras;}
 
     ///kiiras visszavezetve a Film-re
     virtual void kiir() const override {
