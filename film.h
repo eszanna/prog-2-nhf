@@ -59,9 +59,9 @@ public:
 
 
     ///Getterek
-    String getCim(){return cim;}
-    int getHossz(){return hossz;}
-    int getKiadasEv(){return kiadasEv;}
+    String getCim()const {return cim;}
+    int getHossz()const {return hossz;}
+    int getKiadasEv()const {return kiadasEv;}
 
     ///Kiirja a standard outputra
     virtual void kiir() const {
@@ -89,9 +89,11 @@ public:
 
 };
 
-
-
-
+//Fajlba irashoz kell
+std::ostream& operator<<(std::ostream& os, const Film& film) {
+    os << film.getCim() << " (" << film.getHossz() << " perc, " << film.getKiadasEv() << ")";
+    return os;
+}
 
 #endif // FILM_H
 
