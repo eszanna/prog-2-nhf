@@ -1,7 +1,6 @@
 #ifndef FILMTAR_HPP
 #define FILMTAR_HPP
 
-
 #include <string>
 #include <iostream>
 
@@ -11,7 +10,6 @@
 #include "csaladifilm.h"
 
 ///tobbfele filmet tarolni tudo filmtar osztaly
-
 
 class Filmtar : public Film {
     static const size_t kezdo_kapacitas = 10;
@@ -45,10 +43,24 @@ public:
         tar[db++] = ap; //mindenkeppen hozzaadjuk a vegere
     }
 
-    ///kiirja az osszes filmet
+    /// kiirja az osszes filmet
     void kiir() const {
         for (size_t i = 0; i < db; i++)
             tar[i]->kiir();
+    }
+
+    /// fajlba irja a filmlistat
+    void fajlba(const String& filename){
+        std::ofstream file(filename.c_str());
+        if(!file.is_open()){
+            std::cerr << "Nem sikerult megnyitni a fajlt.\n";
+            return;
+        }
+        for (size_t i = 0; i < db; i++) {
+            file << *tar[i] << std::endl;
+        }
+
+    file.close();
     }
 
     ///torli a parameterkent kapott filmet
@@ -71,7 +83,7 @@ public:
     }
 
     ///indexelo operator
-    Film& operator[](size_t idx) {
+    Film& operator[](size_t idx) const {
         if(idx < db)
             return *tar[idx];
         else
