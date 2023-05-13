@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <fstream>
 
 #include "memtrace.h"
 
@@ -7,7 +7,6 @@
 #include "filmtar.hpp"
 #include "gtest_lite.h"
 #include "string.h"
-
 
 void leak() { int* ptr = new int; std::cout << ptr; }
 
@@ -30,7 +29,6 @@ int main() {
     filmtarolo.felvesz(h);
     filmtarolo.felvesz(cs);
     filmtarolo.felvesz(k);
-
 
     int menu = 0;
 
@@ -67,11 +65,8 @@ int main() {
                     }
                 }
                 if(!talalt)
-                    std::cout << "\n\nNincs ilyen film";
-
-
+                    std::cout << "\n\n------Nincs ilyen film-------\n\n";
         }
-
 
         else if (menu == 3) {
                 int tipus;
@@ -83,26 +78,22 @@ int main() {
                     filmtarolo.felvesz(ujf);
                     std::cout<<"\nA modositott filmlista: "<<std::endl;
                     filmtarolo.kiir();
-
                 }
-
                 else if(tipus == 2){
                     CsaladiFilm* ujcs = ujcs->beolvasCsaladi();
                     filmtarolo.felvesz(ujcs);
                     std::cout<<"\nA modositott csaladifilmlista: "<<std::endl;
                     filmtarolo.kiir();
-
                 }
                 else if(tipus == 3){
                     DokumentumFilm* ujd = ujd->beolvasDokumentum();
                     filmtarolo.felvesz(ujd);
                     std::cout<<"\nA modositott doksifilmlista: "<<std::endl;
                     filmtarolo.kiir();
-
                 }
             else
-                std::cout<< "\n\nNincs ilyen tipus";
-}
+                std::cout<< "\n\n------Nincs ilyen tipus--------\n";
+        }
 
          else if(menu == 4){
 
@@ -118,24 +109,22 @@ int main() {
                     }
                     std::cout<<"\nA modositott filmlista: "<<std::endl;
                     filmtarolo.kiir();
-
          }
 
-
         else if(menu == 5){
-            std::cout << "To be done";
-        }
 
+            filmtarolo.fajlba("filmek.txt");
+            std::cout << "\n\nSiker, a projekt mappajaban megtalalhato a film.txt.\n";
+        }
 
         else if(menu == 6){
                 std::cout << "\n\tAdios!" << std::endl;
                 break;
             }
         else{
-                std::cout << "\nNincs ilyen menupont. Valassz ujra!" << std::endl;
+                std::cout << "\n--------Nincs ilyen menupont. Valassz ujra!--------" << std::endl;
         }
     }
-
 
 ///TESZTESETEK
 
@@ -227,9 +216,6 @@ TEST(Filmtar, torles indexelo op hiba) {
       filmtarolo.felvesz(e);
       EXPECT_THROW(filmtarolo.torol(2), const char*);
 }ENDM
-
-
-
 
     return 0;
 }
