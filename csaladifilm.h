@@ -9,17 +9,16 @@ class CsaladiFilm : public Film {
     int korhatar;
 
 public:
-    ///ctr-ek
+    /// konstruktorok, destruktor
     CsaladiFilm(): Film(), korhatar(0){}
     CsaladiFilm(String c, int h, int k, int korh) : Film(c, h, k), korhatar(korh) {}
     ~CsaladiFilm() { korhatar = 0; }
 
-    ///cpy ctr
+    /// cpy ctr
     CsaladiFilm(const CsaladiFilm& rhs) : Film(rhs){
         korhatar = rhs.korhatar;
     }
-
-    ///assign operator
+    /// assign operator
     CsaladiFilm& operator=(const CsaladiFilm& rhs){
         if(this != &rhs){
             Film::operator=(rhs);
@@ -27,18 +26,15 @@ public:
         }
         return *this;
     }
+    /// getter
+    int getKorhatar()const {return korhatar;}
 
-    ///getter
-    int getKorhatar(){return korhatar;}
-
-
-    ///kiiras visszavezetve a Film osztalyra, utana irja ki az extra adattagot
+    /// kiiras visszavezetve a Film osztalyra, utana irja ki az extra adattagot
     virtual void kiir() const override {
         Film::kiir();
         std::cout << "Korhatar: \t\t" << korhatar << std::endl;
     }
-
-    ///beolvasas szinten visszavezetve a Film-re
+    /// beolvasas szinten visszavezetve a Film-re
      CsaladiFilm* beolvasCsaladi() {
         Film* temp = Film::beolvas();
         int kh;
@@ -49,7 +45,6 @@ public:
         delete temp;                  //a Film mar nem kell, bemasoltuk a Csaladiba, torolni kell
         return uj;
     }
-
 };
 
 
