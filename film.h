@@ -31,22 +31,26 @@ protected:
     int kiadasEv;
 
 public:
-    ///Parameter nelkuli ctr
+    /// konstruktorok
     Film() { cim = ""; hossz = 0; kiadasEv = 0; }
-
     Film(String c, int h = 0, int k = 0) : cim(c), hossz(h), kiadasEv(k){}
 
-    // Destruktor
+    /// destruktor
     virtual ~Film() { cim = ""; hossz = 0; kiadasEv = 0; }
 
-    ///Copy ctr
+    /// qetterek
+    String getCim()const {return cim;}
+    int getHossz()const {return hossz;}
+    int getKiadasEv()const {return kiadasEv;}
+
+    /// copy ctr
     Film(const Film& rhs){
             cim = rhs.cim;
             hossz = rhs.hossz;
             kiadasEv = rhs.kiadasEv;
 
     }
-    ///Assign operator
+    /// assign operator
     Film& operator=(const Film& rhs){
         if(this != &rhs){
             cim = rhs.cim;
@@ -56,19 +60,13 @@ public:
         return *this;
     }
 
-
-
-    ///Getterek
-    String getCim()const {return cim;}
-    int getHossz()const {return hossz;}
-    int getKiadasEv()const {return kiadasEv;}
-
-    ///Kiirja a standard outputra
+    /// kiirja a standard outputra
     virtual void kiir() const {
+        if(cim == "") throw "Nincs mit kiirni"; //cim nelkuli film nem lehet
         std::cout << "\nCim: \t\t\t" << cim << std::endl << "Hossz: \t\t\t" << hossz << std::endl << "Kiadas eve: \t\t" << kiadasEv << std::endl;
     }
 
-    ///Standard inputrol beolvas
+    /// standard inputrol beolvas
      Film* beolvas() {
         String c = "";
         int h;
@@ -84,9 +82,10 @@ public:
 
         std::cout << "Kiadas eve: ";
         std::cin >> e;
+
+        if(c == "" || h <= 0 ) throw "Ilyen film nem letezhet, negativ hossz vagy cim nelkuli";
         return new Film(c,h,e);
     }
-
 };
 
 //Fajlba irashoz kell
@@ -94,6 +93,5 @@ std::ostream& operator<<(std::ostream& os, const Film& film) {
     os << film.getCim() << " (" << film.getHossz() << " perc, " << film.getKiadasEv() << ")";
     return os;
 }
-
 #endif // FILM_H
 

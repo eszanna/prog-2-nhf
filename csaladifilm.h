@@ -32,8 +32,11 @@ public:
     /// kiiras visszavezetve a Film osztalyra, utana irja ki az extra adattagot
     virtual void kiir() const override {
         Film::kiir();
+        if(korhatar == 0) throw "Nincs mit kiirni, ez nem csaladifilm, csak film, mert nincs korhatar";
         std::cout << "Korhatar: \t\t" << korhatar << std::endl;
+
     }
+
     /// beolvasas szinten visszavezetve a Film-re
      CsaladiFilm* beolvasCsaladi() {
         Film* temp = Film::beolvas();

@@ -10,17 +10,17 @@ class DokumentumFilm : public Film {
     String leiras;
 
 public:
-    ///ctr-ek
+    /// ctr-ek
     DokumentumFilm() : Film(), leiras("") {}
     DokumentumFilm(String c, int h, int k, String l) : Film(c, h, k), leiras(l) {}
     ~DokumentumFilm() { leiras = ""; }
 
-    ///copy ctr
+    /// copy ctr
     DokumentumFilm(const DokumentumFilm& rhs) : Film(rhs){
         leiras = rhs.leiras;
     }
 
-    ///assign operator
+    /// assign operator
     DokumentumFilm& operator=(const DokumentumFilm& rhs){
         if(this != &rhs){
             Film::operator=(rhs);
@@ -28,16 +28,18 @@ public:
         }
         return *this;
     }
-    ///getter
+    /// getter
     String getLeiras()const {return leiras;}
 
-    ///kiiras visszavezetve a Film-re
+    /// kiiras visszavezetve a Film-re
     virtual void kiir() const override {
         Film::kiir();
+        if(leiras == "") throw "Nincs mit kiirni, nincs leiras, nem jo a film tipusa";
         std::cout << "Leiras: \t\t" << leiras << std::endl;
+
     }
 
-    ///beolvasas ismet a Film-et felhasznalva
+    /// beolvasas ismet a Film-et felhasznalva
      DokumentumFilm* beolvasDokumentum() {
         Film* temp = Film::beolvas();
         String l;
